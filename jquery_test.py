@@ -4,6 +4,7 @@ import sys
 from PyQt4.QtCore import QObject, pyqtSlot, QTimer
 from PyQt4.QtGui import QApplication
 from PyQt4.QtWebKit import QWebView
+from qt_helpers import * 
 
 html = """
 <html>
@@ -14,29 +15,6 @@ html = """
 </body>
 </html>
 """
-
-class ConsolePrinter(QObject):
-    def __init__(self, parent=None):
-        super(ConsolePrinter, self).__init__(parent)
-
-    @pyqtSlot(str)
-    def text(self, message):
-        print message
-
-class DataQueue(QObject):
-    def __init__(self, parent=None):
-        super(DataQueue, self).__init__(parent)
-        self._queue = []
-
-    @pyqtSlot(str)
-    def push(self, message):
-      self._queue.append(message)
-    
-    def data(self):
-      return self._queue
-    
-    def clear(self):
-      self._queue = []
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -139,7 +139,7 @@ class JQueryBrowser(QWebView):
         """
         self.app = QApplication(sys.argv) # must instantiate first
         QWebView.__init__(self)
-        webpage = WebPage(user_agent or settings.user_agent)
+        webpage = WebPage(user_agent or settings.user_agents[0])
         manager = NetworkAccessManager(proxy, allowed_extensions)
         manager.finished.connect(self.finished)
         webpage.setNetworkAccessManager(manager)
