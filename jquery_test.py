@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 
 import sys
-from PyQt4.QtCore import QObject, pyqtSlot
+from PyQt4.QtCore import QObject, pyqtSlot, QTimer
 from PyQt4.QtGui import QApplication
 from PyQt4.QtWebKit import QWebView
 
@@ -34,6 +34,9 @@ class DataQueue(QObject):
     
     def data(self):
       return self._queue
+    
+    def clear(self):
+      self._queue = []
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
@@ -47,7 +50,7 @@ if __name__ == '__main__':
     data_queue = DataQueue()
     frame.addToJavaScriptWindowObject('data_queue', data_queue)
 
-    frame.evaluateJavaScript("alert('Hello');")
+#    frame.evaluateJavaScript("alert('Hello');")
     frame.evaluateJavaScript("printer.text('Goooooooooo!');")
 
     jquey_mini = open('jquery-latest.min.js', 'r').read()
@@ -56,5 +59,15 @@ if __name__ == '__main__':
     frame.evaluateJavaScript("""$("a").each(function(i,e){data_queue.push($(e).text());})""") 
     print data_queue.data()
 
+    frame.evaluateJavaScript('window.close()')
+
     view.show()
+   
+    timer = QTimer()
+    timer.timeout.connect(exit(1))
+    timer.start(200)
+    
     app.exec_()
+
+    timer.stop();
+    
